@@ -1,0 +1,84 @@
+
+#header {
+    background-color: rgb(16, 211, 162);
+    height: 250px;;
+    text-align: center;
+    border-radius:40px;
+}
+input[type=text] {
+    width: 50%;
+    text-align: center;
+    padding: 12px 20px;
+    margin-top: 100px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+#left-logo {
+    float: left;
+    margin-left : 100px;
+}
+#repo-search{
+     margin-left: 300px;
+     margin-top: 10px;
+     width: 150px;
+     height: 50px;
+     background: rgb(77, 88, 243);
+     border-radius: 10px;
+     font-size: 25px;
+}
+#username-search{
+     margin-top: 10px;
+     width: 150px;
+     height: 50px;
+     background: rgb(77, 88, 243);
+     border-radius: 10px;
+     font-size: 25px;
+}
+a{
+    margin-left: 500px;
+    text-decoration: none;
+    color: black;
+    font-size: 30px;
+}
+#container{
+    float: left;
+    border:1px solid rgb(9, 243, 60);
+    border-radius: 40px;
+    text-align: left;
+    width:45%;
+    margin-top: 50px;
+    margin-left: 20px;
+    background: rgb(188, 243, 172)
+}
+#containerContribut{
+ width:45%;
+  margin-top: 50px;
+ border:1px solid rgb(9, 243, 60);
+ border-radius: 40px;
+ background: rgb(188, 243, 172);
+ float: right;
+}
+li{
+    list-style-type: none;
+    margin-left: 50px;
+}
+.imgRepo{
+    margin-left: 50px;
+    margin-top: 20px;
+    margin-bottom: 0;
+    width: 200px;
+    height: 200px;
+    border:1px solid black;
+    border-radius: 50%
+
+}
+h3{
+    margin-left: 200px;
+}
+.subdiv{
+     border:1px solid rgb(179, 214, 186);
+    border-radius: 40px;
+    margin: 40px;
+    background: rgb(7, 172, 130)
+}
