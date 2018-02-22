@@ -1,0 +1,97 @@
+#title{
+    color:whitesmoke;
+    font-size: 1.3em;
+}
+#header {
+    background-color: rgb(16, 211, 162);
+    height: 450px;;
+    text-align: center;
+    margin: 0 auto;
+    width: 98%
+}
+input[type=text] {
+    width: 100%;
+    text-align: center;
+    padding: 12px 20px;
+    margin-top: 100px;
+    margin-bottom: 30px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+input[type=text]:hover {
+    background: lightblue;
+    width: 100%;
+    text-align: center;
+    padding: 12px 20px;
+    margin-bottom: 30px;
+    margin-top: 100px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#left-logo {
+    float: left;
+    margin-left : 100px;
+}
+#container{
+    float: left;
+    border:1px solid rgb(9, 243, 60); 
+    text-align: left;
+    width:48%;
+    margin-right: 5px;
+     background-color: rgb(16, 211, 162);
+}
+#containerContribut{
+ width:48%;
+ border:1px solid rgb(9, 243, 60); 
+  background-color: rgb(16, 211, 162);
+ float: right;
+}
+li{
+    list-style-type: none;
+    margin-left: 20px;
+    color: black;
+    font-size: 25px
+}
+.imgRepo{
+    margin-left: 50px;
+    margin-top: 20px;
+    margin-bottom: 0;
+    width: 200px;
+    height: 200px;
+    border:1px solid black;
+    border-radius: 50%
+
+}
+h3{
+    margin-left: 200px;
+}
+.subdiv{
+    border:1px solid rgb(179, 214, 186);
+    margin: 40px;
+     background: cornflowerblue;
+    text-align: center;
+    height: 300px;
+}
+a{
+    color: black;
+}
+ h1 {
+    font-size: 2.5rem;
+    text-align: center;
+}
+#usernames{
+    width: 98%;
+     border:1px solid black;
+     margin: 0 auto;
+     background-color: rgb(16, 211, 162);
+}
+.username{
+     border:1px solid black;
+     text-align: center;
+     background: cornflowerblue;
+     margin: 20px auto;
+     width: 90%;
+}
