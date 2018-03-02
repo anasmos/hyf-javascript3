@@ -1,103 +1,154 @@
 'use strict';
-function createAndAppend(name, parent, innerHTML) {
-    const child = document.createElement(name);
-    parent.appendChild(child);
-    if (innerHTML !== undefined) {
-        child.innerHTML = innerHTML;
-    }
-    return child;
-}
+{
+    function renderPage() {
+        const repoContainer = createAndAppend('div', document.body, null, {
+            id: 'container'
+        });
+        const userContainer = createAndAppend('div', document.body, null, {
+            id: 'usernames'
+        });
+        const contributorsContainer = createAndAppend('div', document.body, null, {
+            id: 'containerContribut'
+        });
 
-const hyfButton = document.getElementById('repo-search');
-const usernameButton = document.getElementById('username-search');
-const search = document.getElementById('search-box');
+        const searchInput = document.getElementById('search-box');
 
-function fetchJSON(url) {
-    return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', url);
-        xhr.responseType = 'json';
-        xhr.onload = () => resolve(xhr.response);
-        xhr.onerror = () => reject(xhr.statusText);
-        xhr.send();
-    });
-}
+        const clearContainers = () => {
+            repoContainer.innerHTML = "";
+            userContainer.innerHTML = "";
+            contributorsContainer.innerHTML = "";
+        };
 
-function repoInfo() {
-    const container = document.createElement('div');
-    container.id = 'container';
-    const containerContribut = document.createElement('div');
-    containerContribut.id = 'containerContribut';
-    document.body.appendChild(container);
-    document.body.appendChild(containerContribut);
-
-    fetchJSON("https://api.github.com/repos/HackYourFuture/" + search.value).then(data => {
-        if (!data.name) {
-            createAndAppend('h3', container, `this ${search.value} Repositorie is not found`);
-        }
-        const a = document.createElement('a');
-        a.href = data.html_url;
-        a.target = '_blank';
-        a.id = 'a-id';
-        const div = createAndAppend('div', a);
-        div.className = 'div-hyf';
-        const img = document.createElement('img');
-        img.className = 'imgRepo';
-        img.src = data.owner.avatar_url;
-        div.appendChild(img);
-        container.appendChild(a);
-        const ul = createAndAppend('ul', div);
-        createAndAppend('li', ul, "name of the repo: " + data.name);
-        createAndAppend('li', ul, "The Description: " + data.description);
-        createAndAppend('li', ul, "created by: " + data.owner.login);
-        createAndAppend('li', ul, "created at: " + data.created_at);
-        createAndAppend('li', ul, "last update at: " + data.updated_at);
-        const contribute = data.contributors_url;
-        fetchJSON(contribute).then(items => {
-            createAndAppend('h1', containerContribut, 'contributors:');
-            items.forEach(item => {
-                const divContribut = createAndAppend('div', containerContribut);
-                divContribut.className = 'subdiv';
-                createAndAppend('h2', divContribut, 'the contributor name:  ' + item.login);
-                const imgcon = createAndAppend('img', divContribut);
-                imgcon.src = item.avatar_url;
-                imgcon.className = 'imgRepo';
+        document
+            .getElementById('repo-search')
+            .addEventListener('click', () => {
+                clearContainers();
+                onRepoHyfClick(repoContainer, contributorsContainer, searchInput.value);
             });
-        });
-    });
-}
-hyfButton.addEventListener('click', repoInfo);
 
-function usernameInfo() {
-    const usernames = document.createElement('div');
-    usernames.id = 'usernames';
-    document.body.appendChild(usernames);
-    fetchJSON("https://api.github.com/users/" + search.value + "/repos").then(datas => {
-        if (!datas[0]) {
-            createAndAppend('h3', usernames, `this ${search.value} user is not found`);
+        document
+            .getElementById('username-search')
+            .addEventListener('click', () => {
+                clearContainers();
+                onUserNameClick(userContainer, searchInput.value);
+            });
+    }
+
+    function onRepoHyfClick(repoContainer, contributorsContainer, repoName) {
+        const repoUrl = "https://api.github.com/repos/HackYourFuture/" + repoName;
+        fetchJSON(repoUrl)
+            .then(data => {
+                if (!data.name) {
+                    throw new Error(`this ${repoName} Repository is not found`);
+                }
+
+                const a = createAndAppend('a', repoContainer, null, {
+                    href: data.html_url,
+                    target: '_blank',
+                    id: 'a-id'
+                });
+
+                const div = createAndAppend('div', a, {
+                    class: 'div-hyf'
+                });
+
+                createAndAppend('img', div, null, {
+                    class: 'imgRepo',
+                    src: data.owner.avatar_url
+                });
+
+                const ul = createAndAppend('ul', div);
+
+                createAndAppend('li', ul, "Name of the repo: " + data.name);
+                createAndAppend('li', ul, "Description: " + data.description);
+                createAndAppend('li', ul, "Created by: " + data.owner.login);
+                createAndAppend('li', ul, "Created at: " + data.created_at);
+                createAndAppend('li', ul, "Last update at: " + data.updated_at);
+
+                return fetchJSON(data.contributors_url);
+            })
+            .then(items => {
+                createAndAppend('h1', contributorsContainer, 'contributors:');
+                items.forEach(item => {
+                    const div = createAndAppend('div', contributorsContainer, null, {
+                        class: 'subdiv'
+                    });
+                    createAndAppend('h2', div, 'Contributor name:  ' + item.login);
+                    createAndAppend('img', div, null, {
+                        class: 'imgRepo',
+                        src: item.avatar_url
+                    });
+                });
+            })
+            .catch(error => {
+                createAndAppend('h3', repoContainer, error.message);
+            });
+    }
+
+    function onUserNameClick(userContainer, userName) {
+        const url = "https://api.github.com/users/" + userName + "/repos";
+        fetchJSON(url)
+            .then(items => {
+                if (!items[0]) {
+                    throw new Error(`User ${userName} is not found`);
+                }
+
+                items.forEach(item => {
+                    const username = createAndAppend('div', userContainer, null, {
+                        class: 'username'
+                    });
+
+                    const a = createAndAppend('a', username, null, {
+                        href: item.html_url,
+                        target: '_blank',
+                        id: 'a-id'
+                    });
+
+                    const div = createAndAppend('div', a, null, {
+                        class: 'details'
+                    });
+
+                    createAndAppend('img', div, null, {
+                        class: 'imgRepo',
+                        src: item.owner.avatar_url
+                    });
+
+                    const ul = createAndAppend('ul', div);
+                    createAndAppend('li', ul, "Name of the repo: " + item.name);
+                    createAndAppend('li', ul, "Description: " + item.description);
+                    createAndAppend('li', ul, "Created by: " + item.owner.login);
+                    createAndAppend('li', ul, "Created at: " + item.created_at);
+                    createAndAppend('li', ul, "Last update at: " + item.updated_at);
+                });
+            })
+            .catch(error => {
+                createAndAppend('h3', userContainer, error.message);
+            });
+    }
+
+    function createAndAppend(name, parent, innerHTML, attributes) {
+        attributes = attributes || {};
+        const child = document.createElement(name);
+        parent.appendChild(child);
+        if (innerHTML != null) {
+            child.innerHTML = innerHTML;
         }
-        datas.forEach(data => {
-            const a = document.createElement('a');
-            a.href = data.html_url;
-            a.target = '_blank';
-            a.id = 'a-id';
-            const div = createAndAppend('div', a);
-            div.className = 'details';
-            const img = document.createElement('img');
-            img.className = 'imgRepo';
-            img.src = data.owner.avatar_url;
-            div.appendChild(img);
-            const username = document.createElement('div');
-            username.className = 'username';
-            usernames.appendChild(username);
-            username.appendChild(a);
-            const ul = createAndAppend('ul', div);
-            createAndAppend('li', ul, "name of the repo: " + data.name);
-            createAndAppend('li', ul, "The Description: " + data.description);
-            createAndAppend('li', ul, "created by: " + data.owner.login);
-            createAndAppend('li', ul, "created at: " + data.created_at);
-            createAndAppend('li', ul, "last update at: " + data.updated_at);
+        Object.keys(attributes).forEach(name => {
+            child.setAttribute(name, attributes[name]);
         });
-    });
+        return child;
+    }
+
+    function fetchJSON(url) {
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', url);
+            xhr.responseType = 'json';
+            xhr.onload = () => resolve(xhr.response);
+            xhr.onerror = () => reject(xhr.statusText);
+            xhr.send();
+        });
+    }
+
+    renderPage();
 }
-usernameButton.addEventListener('click', usernameInfo);
